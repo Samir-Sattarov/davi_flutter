@@ -13,15 +13,23 @@ class DaviHeaderCell<DATA> extends StatefulWidget {
       required this.model,
       required this.column,
       required this.resizable,
-      required this.tapToSortEnabled,
+        required this.jsonSizes,
+
+        required this.tapToSortEnabled,
       required this.columnIndex,
-      required this.isMultiSorted})
+        required this.onSizeChanged,
+
+        required this.isMultiSorted})
       : super(key: key);
 
   final DaviModel<DATA> model;
   final DaviColumn<DATA> column;
   final bool resizable;
+  final Map<int, double> jsonSizes;
+
   final bool tapToSortEnabled;
+  final Function(double,  int) onSizeChanged;
+
   final int columnIndex;
   final bool isMultiSorted;
 
@@ -37,6 +45,7 @@ class _DaviHeaderCellState extends State<DaviHeaderCell> {
   Widget build(BuildContext context) {
     HeaderCellThemeData theme = DaviTheme.of(context).headerCell;
 
+
     final bool resizing = widget.model.columnInResizing == widget.column;
     final bool sortEnabled = widget.tapToSortEnabled &&
         !resizing &&
@@ -45,6 +54,13 @@ class _DaviHeaderCellState extends State<DaviHeaderCell> {
         widget.column.resizable &&
         widget.column.grow == null &&
         (sortEnabled || resizing);
+
+    if(widget.jsonSizes.isNotEmpty && widget.jsonSizes.containsKey(widget.columnIndex)) {
+
+      // TODO default column size
+      widget.column.width = widget.jsonSizes[widget.columnIndex]  ?? 100;
+    }
+
 
     List<Widget> children = [];
 
@@ -162,6 +178,9 @@ class _DaviHeaderCellState extends State<DaviHeaderCell> {
     final Offset pos = details.globalPosition;
     final double diff = pos.dx - _lastDragPos;
     widget.column.width += diff;
+
+    widget.onSizeChanged.call(widget.column.width , widget.columnIndex);
+
     _lastDragPos = pos.dx;
   }
 

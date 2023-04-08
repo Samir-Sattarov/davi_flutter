@@ -31,8 +31,12 @@ class TableLayoutBuilder<DATA> extends StatelessWidget {
       required this.visibleRowsLength,
       required this.rowCallbacks,
       required this.onDragScroll,
-      required this.scrolling,
-      required this.lastRowWidget,
+        required this.jsonSizes,
+
+        required this.scrolling,
+        required this.onSizeChanged,
+
+        required this.lastRowWidget,
       required this.onLastRowWidget,
       required this.rowColor,
       required this.rowCursor,
@@ -43,7 +47,11 @@ class TableLayoutBuilder<DATA> extends StatelessWidget {
   final OnRowHoverListener? onHover;
   final ScrollControllers scrollControllers;
   final DaviModel<DATA>? model;
+  final Map<int, double> jsonSizes;
+
   final ColumnWidthBehavior columnWidthBehavior;
+  final Function(double,  int) onSizeChanged;
+
   final int? visibleRowsLength;
   final OnDragScroll onDragScroll;
   final bool scrolling;
@@ -92,8 +100,11 @@ class TableLayoutBuilder<DATA> extends StatelessWidget {
       children.add(TableLayoutChild.header(
           layoutSettings: layoutSettings,
           model: model,
+          jsonSizes: jsonSizes,
           resizable: columnWidthBehavior == ColumnWidthBehavior.scrollable,
           tapToSortEnabled: tapToSortEnabled,
+          onSizeChanged: onSizeChanged,
+
           horizontalScrollOffsets: horizontalScrollOffsets));
       if (layoutSettings.hasVerticalScrollbar) {
         children.add(TableLayoutChild.topCorner());

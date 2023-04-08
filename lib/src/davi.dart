@@ -31,8 +31,11 @@ class Davi<DATA> extends StatefulWidget {
       this.pinnedHorizontalScrollController,
       this.verticalScrollController,
       this.onLastVisibleRow,
+      this.onSizeChanged,
       this.onRowTap,
-      this.onRowSecondaryTap,
+        this.jsonSizes  ,
+
+        this.onRowSecondaryTap,
       this.onRowDoubleTap,
       this.columnWidthBehavior = ColumnWidthBehavior.scrollable,
       int? visibleRowsCount,
@@ -48,6 +51,10 @@ class Davi<DATA> extends StatefulWidget {
         super(key: key);
 
   final DaviModel<DATA>? model;
+  final Function(double, int)? onSizeChanged;
+
+  final Map<int, double>? jsonSizes;
+
   final ScrollController? unpinnedHorizontalScrollController;
   final ScrollController? pinnedHorizontalScrollController;
   final ScrollController? verticalScrollController;
@@ -178,24 +185,27 @@ class _DaviState<DATA> extends State<Davi<DATA>> {
 
     Widget table = ClipRect(
         child: TableLayoutBuilder(
-            onHover: widget.onHover != null ? _setHoveredRowIndex : null,
-            tapToSortEnabled: widget.tapToSortEnabled,
-            scrollControllers: _scrollControllers,
-            columnWidthBehavior: widget.columnWidthBehavior,
-            themeMetrics: themeMetrics,
-            visibleRowsLength: widget.visibleRowsCount,
-            onLastRowWidget: _onLastRowWidget,
-            onLastVisibleRow: _onLastVisibleRowListener,
-            model: widget.model,
-            scrolling: _scrolling,
-            rowColor: widget.rowColor,
-            rowCursor: widget.rowCursor,
-            lastRowWidget: widget.lastRowWidget,
-            rowCallbacks: RowCallbacks(
-                onRowTap: widget.onRowTap,
-                onRowSecondaryTap: widget.onRowSecondaryTap,
-                onRowDoubleTap: widget.onRowDoubleTap),
-            onDragScroll: _onDragScroll));
+      onHover: widget.onHover != null ? _setHoveredRowIndex : null,
+      tapToSortEnabled: widget.tapToSortEnabled,
+      scrollControllers: _scrollControllers,
+      columnWidthBehavior: widget.columnWidthBehavior,
+      themeMetrics: themeMetrics,
+          jsonSizes: widget.jsonSizes ?? {},
+      visibleRowsLength: widget.visibleRowsCount,
+      onLastRowWidget: _onLastRowWidget,
+      onLastVisibleRow: _onLastVisibleRowListener,
+      model: widget.model,
+      scrolling: _scrolling,
+      rowColor: widget.rowColor,
+      rowCursor: widget.rowCursor,
+      lastRowWidget: widget.lastRowWidget,
+      rowCallbacks: RowCallbacks(
+          onRowTap: widget.onRowTap,
+          onRowSecondaryTap: widget.onRowSecondaryTap,
+          onRowDoubleTap: widget.onRowDoubleTap),
+      onDragScroll: _onDragScroll,
+      onSizeChanged: (p0, p1) => widget.onSizeChanged?.call(p0, p1),
+    ));
 
     if (widget.model != null) {
       if (theme.row.hoverBackground != null ||

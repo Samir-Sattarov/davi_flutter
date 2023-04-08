@@ -16,14 +16,18 @@ class HeaderWidget<DATA> extends StatelessWidget {
       {Key? key,
       required this.layoutSettings,
       required this.model,
-      required this.resizable,
-      required this.horizontalScrollOffsets,
+      required this.resizable,    required this.jsonSizes,
+
+        required this.horizontalScrollOffsets,
+        required this.onSizeChanged,
       required this.tapToSortEnabled})
       : super(key: key);
 
   final TableLayoutSettings layoutSettings;
   final DaviModel<DATA> model;
-  final bool resizable;
+  final bool resizable;  final Map<int, double> jsonSizes;
+  final Function(double,  int) onSizeChanged;
+
   final HorizontalScrollOffsets horizontalScrollOffsets;
   final bool tapToSortEnabled;
 
@@ -43,10 +47,12 @@ class HeaderWidget<DATA> extends StatelessWidget {
       final Widget cell = DaviHeaderCell<DATA>(
           key: ValueKey<int>(columnIndex),
           model: model,
-          column: column,
+          column: column,          jsonSizes: jsonSizes,
+
           resizable: resizable,
           tapToSortEnabled: tapToSortEnabled,
           isMultiSorted: isMultiSorted,
+          onSizeChanged: onSizeChanged,
           columnIndex: columnIndex);
       children.add(ColumnsLayoutChild<DATA>(index: columnIndex, child: cell));
     }

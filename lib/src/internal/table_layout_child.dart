@@ -24,15 +24,22 @@ class TableLayoutChild<DATA> extends ParentDataWidget<TableLayoutParentData> {
       {required TableLayoutSettings layoutSettings,
       required DaviModel<DATA>? model,
       required bool resizable,
-      required HorizontalScrollOffsets horizontalScrollOffsets,
-      required bool tapToSortEnabled}) {
+        required Map<int, double> jsonSizes,
+
+        required Function(double,  int) onSizeChanged,
+
+        required HorizontalScrollOffsets horizontalScrollOffsets,
+      required bool tapToSortEnabled,}) {
     return TableLayoutChild._(
         id: LayoutChildId.header,
         child: model != null
             ? HeaderWidget(
                 layoutSettings: layoutSettings,
                 model: model,
-                horizontalScrollOffsets: horizontalScrollOffsets,
+            onSizeChanged: onSizeChanged,
+            jsonSizes: jsonSizes,
+
+            horizontalScrollOffsets: horizontalScrollOffsets,
                 resizable: resizable,
                 tapToSortEnabled: tapToSortEnabled)
             : Container());
