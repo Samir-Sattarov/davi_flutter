@@ -50,6 +50,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DaviModel<Person>? _model;
+  final Map<int, double> jsonSizes = {1: 300, 0: 500, 2: 400};
 
   @override
   void initState() {
@@ -74,9 +75,7 @@ class _HomePageState extends State<HomePage> {
               sortable: false,
               cellBuilder: _buildField,
               cellBackground: (row) => row.data.valid ? null : Colors.red[800])
-        ],
-        alwaysSorted: true,
-        multiSortEnabled: true);
+        ],);
   }
 
   Widget _buildField(BuildContext context, DaviRow<Person> rowData) {
@@ -99,6 +98,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Davi<Person>(_model));
+    return Scaffold(
+        body: Davi<Person>(
+      _model,
+      jsonSizes: jsonSizes,
+    ));
   }
 }

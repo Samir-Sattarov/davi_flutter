@@ -42,6 +42,19 @@ class _DaviHeaderCellState extends State<DaviHeaderCell> {
   double _lastDragPos = 0;
 
   @override
+  void initState() {
+    if(mounted) {
+      Future.delayed(Duration.zero,() {
+        if(widget.jsonSizes.isNotEmpty && widget.jsonSizes.containsKey(widget.columnIndex)) {
+          widget.column.width = widget.jsonSizes[widget.columnIndex] ?? 100;
+        }
+      },);
+    }
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     HeaderCellThemeData theme = DaviTheme.of(context).headerCell;
 
@@ -55,11 +68,6 @@ class _DaviHeaderCellState extends State<DaviHeaderCell> {
         widget.column.grow == null &&
         (sortEnabled || resizing);
 
-    if(widget.jsonSizes.isNotEmpty && widget.jsonSizes.containsKey(widget.columnIndex)) {
-
-      // TODO default column size
-      widget.column.width = widget.jsonSizes[widget.columnIndex]  ?? 100;
-    }
 
 
     List<Widget> children = [];
